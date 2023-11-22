@@ -22,3 +22,22 @@ The above expression states that
   ```
   go install github.com/me/dummy
   ```
+
+### RoundTripper
+- Interface in `http` package to execute one single HTTP transaction, i.e. sending a request and returning corresponding response.
+  ```
+  type RoundTripper interface {
+      RoundTrip(*Request) (*Response, error)
+  }
+  ```
+  
+**Applications**
+- Set authorization headers in request
+- Logging (request URL, response status, time taken etc.)
+
+### ReadResponse
+- Builds and returns an HTTP response with the body read from the given `r` parameter.
+  ```
+  fund ReadResponse(r *bufio.Reader, req *Request) (*Response, error)
+  ```
+  `req` parameter, if provided, is set as the related request in the returned response.
