@@ -18,7 +18,7 @@ Updates dependencies of current module, i.e. `go.mod`.
 - Updates module version in `go.mod`.
 - Downloads module source code into the module cache.
 - Dependencies are resolved recursively.
-- Modules are only downloaded, but not build.
+- Modules are only downloaded, but not built.
 - No error is reported if updated package can’t be built for the current platform.
 
 #### Add or upgrade a dependency to its latest version
