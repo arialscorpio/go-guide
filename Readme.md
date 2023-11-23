@@ -1,4 +1,4 @@
-## Go Guide
+# Go Guide
 ### Best Practices
 * Make dependencies explicit by passing them as parameters.
 
@@ -9,6 +9,32 @@ x.(T)
 The above expression states that 
 1. the interface type variable `x` is not `nil`.
 2. the value stored in `x` is of type `T`.
+
+## Go Commands
+### go get
+Updates dependencies of current module, i.e. `go.mod`.
+- Takes one or more package or module paths as arguments.
+- Resolves package to a module at a specific version.
+- Updates module version in `go.mod`.
+- Downloads module source code into the module cache.
+- Dependencies are resolved recursively.
+- Modules are only downloaded, but not build.
+- No error is reported if updated package can’t be built for the current platform.
+
+#### Add or upgrade a dependency to its latest version
+```
+go get github.com/some/pkg
+```
+
+#### Upgrade or downgrade a dependency to a specific version
+```
+go get github.com/some/pkg@v1.2.3
+```
+
+#### Remove a dependency
+```
+go get github.com/me/mod@none
+```
 
 ### go install
 - Builds and installs packages.
