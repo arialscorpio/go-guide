@@ -67,3 +67,81 @@ go get github.com/me/mod@none
   fund ReadResponse(r *bufio.Reader, req *Request) (*Response, error)
   ```
   `req` parameter, if provided, is set as the related request in the returned response.
+
+### Concurrency
+Perform multiple independent tasks simultaneously.
+
+### Goroutine
+- Function that runs concurrently with other functions.
+- Lightweight thread managed by go runtime.
+- Precede function invocation by `go` prefix.
+  ```
+  go doSomething(arg1, arg2)
+  ```
+  Evaluation of `arg1` and `arg2` happens in current goroutine whereas execution of `doSomething` happens in a new goroutine.
+- Non blocking. Programm control moves immediately to the next instruction.
+- Share same address space; access to shared memory must be synchronized.
+- `main()` function of `main` package is implicitly a goroutine.
+
+### Channels
+- Channels provide a way for two goroutines to communicate with each other.
+- Type identifier `chan`.
+  ```
+  var c chan string = make(chan string)
+
+  // send
+  c <- "hello"
+
+  // receive
+  msg := <- c
+  ```
+  Data type at the end defines the type of data flows through the channel.
+- Receiver is blocked until sender sends the data and vice versa, i.e. sender waits until receiver receives the data.
+- Read/write/uni-directional channel
+  ```
+  // w is write only channel
+  func Ping(w chan<- string) {
+      ...
+  }
+
+  // r is read only channel
+  func Ping(r <-chan string) {
+      ...
+  }
+  ```
+- A bi-directional channel can be used to both send and receive data. It can also be passed as an argument to a function accepting uni-directional channel. The opposite is not true.
+- Can be closed by sender to signal the end of transmittion.
+  > NOTE: Sending data on closed channel triggers panic.
+- Receiver can detect a closed channel.
+  ```
+  d, ok := <- c
+  ```
+  `ok` is *false* if channel is closed.
+
+### Buffered Channel
+- Channel with associated buffer, i.e. capacity more than one.
+- Sending/receiving is not blocked as long as the channel buffer is not full.
+  ```
+  // channel with buffer capacity 3
+  var c chan string := make(chan string, 3)
+  ```
+
+### Select
+Switch for channels.
+```
+var c1, c2 chan string
+
+...
+
+select {
+    case d := <- c1
+        ...
+    case d := <- c2
+        ...
+    default:
+        ...
+}
+```
+- Selects the first channel ready to receive or send.
+- Randomly selects one if more than one channels are ready.
+- Blocks if none of the channels are ready until one is available. A default case, if defined, is executed in this case.
